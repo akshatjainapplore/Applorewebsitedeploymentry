@@ -1,0 +1,34 @@
+{
+  "name": "applore-website",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:generate": "pnpm --filter @applore/db db:generate",
+    "db:migrate": "pnpm --filter @applore/db db:migrate",
+    "db:migrate:deploy": "pnpm --filter @applore/db db:migrate:deploy",
+    "db:seed": "pnpm --filter @applore/db db:seed",
+    "db:studio": "pnpm --filter @applore/db db:studio",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+/* Form field styles */
+.field-input {
+  @apply w-full h-9 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring;
+}
+textarea.field-input {
+  @apply h-auto;
+}
+
+/* Tiptap editor styles */
+.tiptap {
+  @apply outline-none min-h-[200px] p-4 text-sm;
+}
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply text-muted-foreground float-left h-0 pointer-events-none;
+}
+.tiptap h1 { @apply text-2xl font-bold mb-3 mt-4; }
+.tiptap h2 { @apply text-xl font-bold mb-2 mt-3; }
+.tiptap h3 { @apply text-lg font-semibold mb-2 mt-3; }
+.tiptap p { @apply mb-2 leading-relaxed; }
+.tiptap ul { @apply list-disc list-inside mb-2 space-y-1; }
+.tiptap ol { @apply list-decimal list-inside mb-2 space-y-1; }
+.tiptap a { @apply text-primary underline; }
+.tiptap blockquote { @apply border-l-4 border-primary pl-4 italic text-muted-foreground my-3; }
+.tiptap code { @apply bg-muted px-1.5 py-0.5 rounded text-xs font-mono; }
+.tiptap pre { @apply bg-muted p-3 rounded-lg overflow-x-auto mb-3 text-xs; }
+.tiptap pre code { @apply bg-transparent p-0; }
+.tiptap img { @apply rounded-lg max-w-full my-3; }

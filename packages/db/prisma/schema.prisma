@@ -1,0 +1,222 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+enum MenuLocation {
+  HEADER
+  FOOTER
+  SIDEBAR
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(EDITOR)
+  avatar    String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts Post[]
+
+  @@map("users")
+}
+
+model Page {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  content     Json          @default("[]")
+  status      ContentStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  seo SEO?
+
+  @@map("pages")
+}
+
+model Post {
+  id           String        @id @default(cuid())
+  title        String
+  slug         String        @unique
+  excerpt      String?
+  content      String        @default("")
+  featuredImage String?
+  status       ContentStatus @default(DRAFT)
+  publishedAt  DateTime?
+  scheduledAt  DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  categories PostCategory[]
+  tags       PostTag[]
+  seo        SEO?
+
+  @@map("posts")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  posts PostCategory[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts PostTag[]
+
+  @@map("tags")
+}
+
+model PostCategory {
+  postId     String
+  categoryId String
+
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+  @@map("post_categories")
+}
+
+model PostTag {
+  postId String
+  tagId  String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+model SEO {
+  id                   String   @id @default(cuid())
+  metaTitle            String?
+  metaDescription      String?
+  ogTitle              String?
+  ogDescription        String?
+  ogImage              String?
+  twitterTitle         String?
+  twitterDescription   String?
+  twitterImage         String?
+  canonicalUrl         String?
+  robots               String?  @default("index,follow")
+  jsonLd               String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  pageId String? @unique
+  page   Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  postId String? @unique
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("seo")
+}
+
+model MediaFile {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  url          String
+  altText      String?
+  width        Int?
+  height       Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("media_files")
+}
+
+model Menu {
+  id        String       @id @default(cuid())
+  name      String
+  location  MenuLocation @default(HEADER)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  items MenuItem[]
+
+  @@map("menus")
+}
+
+model MenuItem {
+  id       String  @id @default(cuid())
+  label    String
+  url      String?
+  target   String? @default("_self")
+  order    Int     @default(0)
+  parentId String?
+
+  menuId String
+  menu   Menu   @relation(fields: [menuId], references: [id], onDelete: Cascade)
+
+  parent   MenuItem?  @relation("MenuItemChildren", fields: [parentId], references: [id])
+  children MenuItem[] @relation("MenuItemChildren")
+
+  pageId String?
+  postId String?
+
+  @@map("menu_items")
+}
+
+model SiteSettings {
+  id          String   @id @default(cuid())
+  siteTitle   String   @default("Applore")
+  tagline     String?
+  logoUrl     String?
+  faviconUrl  String?
+  socialLinks Json     @default("{}")
+  analyticsId String?
+  smtpHost    String?
+  smtpPort    Int?
+  smtpUser    String?
+  smtpPass    String?
+  smtpSecure  Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+
+  @@map("site_settings")
+}
