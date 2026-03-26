@@ -5,19 +5,23 @@ interface TextBlockProps {
 }
 
 export default function TextBlock({ data }: TextBlockProps) {
-  const alignClass = {
+  const alignMap = {
     left: 'text-left',
     center: 'text-center',
     right: 'text-right',
-  }[data.align || 'left'];
+  };
+  const alignClass = alignMap[data.align || 'left'];
 
   return (
-    <section className="py-16">
-      <div className={`container mx-auto px-4 max-w-4xl ${alignClass}`}>
-        <div
-          className="prose"
-          dangerouslySetInnerHTML={{ __html: data.content }}
-        />
+    <section className="py-16 bg-white">
+      <div className={`max-w-[1440px] mx-auto px-8`}>
+        <div className={`max-w-4xl ${data.align === 'center' ? 'mx-auto' : ''} ${alignClass}`}>
+          <div
+            className="prose"
+            style={{ fontFamily: 'Manrope, system-ui, sans-serif' }}
+            dangerouslySetInnerHTML={{ __html: data.content }}
+          />
+        </div>
       </div>
     </section>
   );
