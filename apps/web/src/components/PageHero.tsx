@@ -15,7 +15,7 @@ export default function PageHero({ label, title, titleItalic, subtitle, descript
   return (
     <section style={{
       background: 'linear-gradient(135deg, #EEF2FF 0%, #E8E4F8 50%, #FCE8F3 100%)',
-      padding: '96px 32px 80px',
+      padding: '120px 32px 80px',
       textAlign: 'center',
     }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>

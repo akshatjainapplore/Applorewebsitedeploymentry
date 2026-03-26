@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 
 interface HeaderProps {
@@ -14,7 +13,7 @@ const NAV_ITEMS = [
   {
     label: 'About Us', href: '/about', hasDropdown: true, children: [
       { label: 'Company Overview', href: '/about' },
-      { label: 'Our Approach', href: '/about#approach' },
+      { label: 'Our Approach', href: '/services' },
       { label: 'Our Team', href: '/about#team' },
       { label: 'Careers', href: '/careers' },
     ],
@@ -22,43 +21,23 @@ const NAV_ITEMS = [
   { label: 'Our Work', href: '/work', hasDropdown: false },
   {
     label: 'Our expertise', href: '/services', hasDropdown: true, children: [
-      { label: 'Technology Strategy', href: '/services/technology-strategy' },
-      { label: 'Platform & Architecture', href: '/services/platform-architecture' },
-      { label: 'Data & AI', href: '/services/data-ai' },
-      { label: 'Intelligence & Automation', href: '/services/intelligence-automation' },
+      { label: 'Technology Strategy', href: '/services' },
+      { label: 'Platform & Architecture', href: '/services' },
+      { label: 'Data & AI', href: '/services' },
+      { label: 'Intelligence & Automation', href: '/capabilities' },
     ],
   },
   { label: 'Insights', href: '/insights', hasDropdown: false },
 ];
 
-function FallbackLogo() {
-  return (
-    <svg width="140" height="40" viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="16,4 30,36 2,36" fill="#2563EB" />
-      <polygon points="16,4 30,36 16,22" fill="#7C3AED" opacity="0.6" />
-      <text x="38" y="28" fontFamily="system-ui, sans-serif" fontWeight="800" fontSize="18" letterSpacing="3" fill="#111827">APPLORE</text>
-    </svg>
-  );
-}
-
 function Logo() {
-  const [imgError, setImgError] = useState(false);
-
   return (
     <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-      {imgError ? (
-        <FallbackLogo />
-      ) : (
-        <Image
-          src="/applore-logo.svg"
-          alt="Applore"
-          width={120}
-          height={40}
-          priority
-          onError={() => setImgError(true)}
-          style={{ display: 'block' }}
-        />
-      )}
+      <svg width="140" height="40" viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="16,4 30,36 2,36" fill="#2563EB" />
+        <polygon points="16,4 30,36 16,22" fill="#7C3AED" opacity="0.6" />
+        <text x="38" y="28" fontFamily="system-ui, sans-serif" fontWeight="800" fontSize="18" letterSpacing="3" fill="#111827">APPLORE</text>
+      </svg>
     </Link>
   );
 }
