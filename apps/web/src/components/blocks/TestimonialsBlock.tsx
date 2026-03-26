@@ -7,8 +7,7 @@ interface TestimonialsBlockProps {
 
 export default function TestimonialsBlock({ data }: TestimonialsBlockProps) {
   return (
-    // Dark background matching Figma Section fills:#242424
-    <section className="py-20" style={{ backgroundColor: '#242424' }}>
+    <section className="py-20" style={{ backgroundColor: '#0a0a1e' }}>
       <div className="max-w-[1440px] mx-auto px-8">
         {/* Section header */}
         {data.heading && (
@@ -30,7 +29,7 @@ export default function TestimonialsBlock({ data }: TestimonialsBlockProps) {
                     width: '8px',
                     height: '8px',
                     borderRadius: '50%',
-                    backgroundColor: '#6e45ff',
+                    background: 'linear-gradient(135deg, #10A4F2, #8B4EFD)',
                   }}
                 />
                 What our clients say
@@ -58,8 +57,8 @@ export default function TestimonialsBlock({ data }: TestimonialsBlockProps) {
               key={t.id}
               className="flex flex-col justify-between p-8 rounded-2xl"
               style={{
-                backgroundColor: '#1e1e1e',
-                border: '1px solid rgba(248,246,241,0.08)',
+                backgroundColor: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
                 minHeight: '280px',
               }}
             >

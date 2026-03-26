@@ -15,6 +15,7 @@ async function apiFetch<T>(
 
   const response = await fetch(url, {
     ...fetchOptions,
+    signal: AbortSignal.timeout(5000),
     next: {
       revalidate: revalidate === false ? 0 : revalidate,
       tags,
@@ -111,7 +112,8 @@ export async function getMenuByLocation(location: 'HEADER' | 'FOOTER') {
     });
     return res.data;
   } catch {
-    return null;
+    const { MOCK_HEADER_MENU, MOCK_FOOTER_MENU } = await import('./mock-data');
+    return location === 'HEADER' ? MOCK_HEADER_MENU : MOCK_FOOTER_MENU;
   }
 }
 
@@ -124,7 +126,8 @@ export async function getSiteSettings() {
     });
     return res.data;
   } catch {
-    return null;
+    const { MOCK_SITE_SETTINGS } = await import('./mock-data');
+    return MOCK_SITE_SETTINGS;
   }
 }
 

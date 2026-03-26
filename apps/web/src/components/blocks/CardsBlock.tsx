@@ -1,3 +1,5 @@
+'use client';
+
 import type { CardsBlockData } from '@applore/types';
 import Link from 'next/link';
 import Image from 'next/image';

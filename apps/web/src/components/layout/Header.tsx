@@ -3,132 +3,110 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import type { MenuItem } from '@applore/types';
 
 interface HeaderProps {
-  settings: {
-    siteTitle?: string;
-    logoUrl?: string;
-  } | null;
-  menu: {
-    items: MenuItem[];
-  } | null;
+  settings: any;
+  menu: any;
 }
 
-export default function Header({ settings, menu }: HeaderProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const items = menu?.items || [];
+const NAV_ITEMS = [
+  { label: 'Home', href: '/', hasDropdown: false },
+  {
+    label: 'About Us', href: '/about', hasDropdown: true, children: [
+      { label: 'Company Overview', href: '/about' },
+      { label: 'Our Approach', href: '/about#approach' },
+      { label: 'Our Team', href: '/about#team' },
+      { label: 'Careers', href: '/careers' },
+    ],
+  },
+  { label: 'Our Work', href: '/work', hasDropdown: false },
+  {
+    label: 'Our expertise', href: '/services', hasDropdown: true, children: [
+      { label: 'Technology Strategy', href: '/services/technology-strategy' },
+      { label: 'Platform & Architecture', href: '/services/platform-architecture' },
+      { label: 'Data & AI', href: '/services/data-ai' },
+      { label: 'Intelligence & Automation', href: '/services/intelligence-automation' },
+    ],
+  },
+  { label: 'Insights', href: '/insights', hasDropdown: false },
+];
 
+function FallbackLogo() {
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-[#e6e6e6]">
-      <div className="max-w-[1440px] mx-auto px-8">
-        <div className="flex h-[72px] items-center justify-between gap-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0">
-            {settings?.logoUrl ? (
-              <Image
-                src={settings.logoUrl}
-                alt={settings.siteTitle || 'Applore'}
-                width={140}
-                height={40}
-                className="object-contain"
-              />
-            ) : (
-              <span
-                className="text-xl font-bold tracking-tight"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif', color: '#000000' }}
-              >
-                APPLORE
-              </span>
-            )}
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
-            {items.map((item) => (
-              <NavItem key={item.id} item={item} />
-            ))}
-          </nav>
-
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center shrink-0">
-            <Link
-              href="/contact"
-              className="btn-cta text-sm"
-            >
-              Start a Conversation
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Nav */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-[#e6e6e6] bg-white">
-          <nav className="max-w-[1440px] mx-auto px-8 py-4">
-            <div className="flex flex-col gap-1">
-              {items.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.url || '#'}
-                  target={item.target || '_self'}
-                  className="px-3 py-3 text-sm font-medium text-[#000000] hover:text-[#6e45ff] transition-colors rounded-md hover:bg-gray-50"
-                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <Link
-                href="/contact"
-                className="mt-2 btn-cta text-center"
-                onClick={() => setMobileOpen(false)}
-              >
-                Start a Conversation
-              </Link>
-            </div>
-          </nav>
-        </div>
-      )}
-    </header>
+    <svg width="140" height="40" viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="16,4 30,36 2,36" fill="#2563EB" />
+      <polygon points="16,4 30,36 16,22" fill="#7C3AED" opacity="0.6" />
+      <text x="38" y="28" fontFamily="system-ui, sans-serif" fontWeight="800" fontSize="18" letterSpacing="3" fill="#111827">APPLORE</text>
+    </svg>
   );
 }
 
-function NavItem({ item }: { item: MenuItem }) {
+function Logo() {
+  const [imgError, setImgError] = useState(false);
+
+  return (
+    <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
+      {imgError ? (
+        <FallbackLogo />
+      ) : (
+        <Image
+          src="/applore-logo.svg"
+          alt="Applore"
+          width={120}
+          height={40}
+          priority
+          onError={() => setImgError(true)}
+          style={{ display: 'block' }}
+        />
+      )}
+    </Link>
+  );
+}
+
+function NavItem({ item }: { item: typeof NAV_ITEMS[0] }) {
   const [open, setOpen] = useState(false);
 
-  if (item.children && item.children.length > 0) {
+  if (item.hasDropdown && item.children) {
     return (
       <div
-        className="relative"
+        style={{ position: 'relative' }}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
         <button
-          className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-[#000000] hover:text-[#6e45ff] transition-colors rounded-md"
-          style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-          aria-expanded={open}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '8px 14px',
+            fontSize: '14px',
+            fontWeight: 500,
+            color: '#374151',
+            borderRadius: '10px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            transition: 'color 0.15s, background 0.15s',
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = '#2563EB';
+            (e.currentTarget as HTMLButtonElement).style.background = '#EFF6FF';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = '#374151';
+            (e.currentTarget as HTMLButtonElement).style.background = 'none';
+          }}
         >
           {item.label}
           <svg
-            className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+            style={{
+              width: '14px',
+              height: '14px',
+              transition: 'transform 0.2s',
+              transform: open ? 'rotate(180deg)' : 'none',
+              flexShrink: 0,
+            }}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -138,13 +116,43 @@ function NavItem({ item }: { item: MenuItem }) {
         </button>
 
         {open && (
-          <div className="absolute top-full left-0 mt-0 w-56 bg-white rounded-xl shadow-[2px_4px_4px_rgba(0,0,0,0.09)] border border-[#e6e6e6] py-2 z-50">
-            {item.children.map((child) => (
+          <div
+            style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              marginTop: '4px',
+              minWidth: '220px',
+              background: '#ffffff',
+              borderRadius: '14px',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+              border: '1px solid rgba(0,0,0,0.06)',
+              padding: '8px',
+              zIndex: 200,
+            }}
+          >
+            {item.children!.map((child) => (
               <Link
-                key={child.id}
-                href={child.url || '#'}
-                className="block px-5 py-2.5 text-sm text-[#000000] hover:text-[#6e45ff] hover:bg-[#f8f6f1] transition-colors"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+                key={child.label}
+                href={child.href}
+                style={{
+                  display: 'block',
+                  padding: '9px 14px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  color: '#374151',
+                  borderRadius: '10px',
+                  textDecoration: 'none',
+                  transition: 'background 0.15s, color 0.15s',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.background = '#EFF6FF';
+                  (e.currentTarget as HTMLAnchorElement).style.color = '#2563EB';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
+                  (e.currentTarget as HTMLAnchorElement).style.color = '#374151';
+                }}
               >
                 {child.label}
               </Link>
@@ -157,12 +165,106 @@ function NavItem({ item }: { item: MenuItem }) {
 
   return (
     <Link
-      href={item.url || '#'}
-      target={item.target || '_self'}
-      className="px-4 py-2 text-sm font-medium text-[#000000] hover:text-[#6e45ff] transition-colors rounded-md"
-      style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+      href={item.href}
+      style={{
+        padding: '8px 14px',
+        fontSize: '14px',
+        fontWeight: 500,
+        color: '#374151',
+        borderRadius: '10px',
+        textDecoration: 'none',
+        transition: 'color 0.15s, background 0.15s',
+        display: 'inline-block',
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLAnchorElement).style.color = '#2563EB';
+        (e.currentTarget as HTMLAnchorElement).style.background = '#EFF6FF';
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLAnchorElement).style.color = '#374151';
+        (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
+      }}
     >
       {item.label}
     </Link>
+  );
+}
+
+export default function Header({ settings: _settings, menu: _menu }: HeaderProps) {
+  return (
+    <div
+      style={{
+        position: 'sticky',
+        top: '16px',
+        zIndex: 50,
+        padding: '0 16px',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          backgroundColor: '#ffffff',
+          borderRadius: '20px',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04)',
+        }}
+      >
+        {/* Main nav row */}
+        <div
+          style={{
+            display: 'flex',
+            height: '64px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 24px',
+          }}
+        >
+          <Logo />
+
+          {/* Desktop nav links */}
+          <nav
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2px',
+            }}
+          >
+            {NAV_ITEMS.map((item) => (
+              <NavItem key={item.label} item={item} />
+            ))}
+          </nav>
+
+          {/* CTA button */}
+          <div style={{ flexShrink: 0 }}>
+            <Link
+              href="/contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '10px 22px',
+                borderRadius: '9999px',
+                background: '#2563EB',
+                color: '#ffffff',
+                fontSize: '14px',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'background 0.2s, box-shadow 0.2s',
+                boxShadow: '0 2px 8px rgba(37,99,235,0.3)',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = '#1d4ed8';
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 14px rgba(37,99,235,0.45)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = '#2563EB';
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 8px rgba(37,99,235,0.3)';
+              }}
+            >
+              Start a Conversation
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

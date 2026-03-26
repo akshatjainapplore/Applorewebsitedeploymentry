@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Prevent static generation timeout when API/fonts CDN unreachable
+  staticPageGenerationTimeout: 10,
   images: {
     remotePatterns: [
       {

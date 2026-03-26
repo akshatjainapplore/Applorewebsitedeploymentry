@@ -74,7 +74,7 @@ export default async function PostPage({ params }: PostPageProps) {
         {/* Categories */}
         {post.categories && post.categories.length > 0 && (
           <div className="flex gap-2 mb-4">
-            {post.categories.map((pc: { category: { id: string; name: string; slug: string } }) => (
+            {(post.categories as unknown as { category: { id: string; name: string; slug: string } }[]).map((pc) => (
               <Link
                 key={pc.category.id}
                 href={`/blog?category=${pc.category.id}`}
@@ -101,7 +101,7 @@ export default async function PostPage({ params }: PostPageProps) {
           {formattedDate && <span>{formattedDate}</span>}
           {post.tags && post.tags.length > 0 && (
             <div className="flex gap-2">
-              {post.tags.map((pt: { tag: { id: string; name: string } }) => (
+              {(post.tags as unknown as { tag: { id: string; name: string } }[]).map((pt) => (
                 <span key={pt.tag.id} className="text-xs border border-border px-2 py-0.5 rounded">
                   #{pt.tag.name}
                 </span>
