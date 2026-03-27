@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
-import type { Page, ContentBlock, SEOData } from '@applore/types';
+import type { Page, ContentBlock, SEOData, ContentStatus } from '@applore/types';
 import BlockEditor from '@/components/editor/BlockEditor';
 import SEOPanel from '@/components/seo/SEOPanel';
 
@@ -38,7 +38,7 @@ export default function PageForm({ page }: PageFormProps) {
     }
   }
 
-  async function handleSave(newStatus?: string) {
+  async function handleSave(newStatus?: ContentStatus) {
     const finalStatus = newStatus || status;
     setSaving(true);
     try {
@@ -135,7 +135,7 @@ export default function PageForm({ page }: PageFormProps) {
             <label className="text-sm font-medium mb-1 block">Status</label>
             <select
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={(e) => setStatus(e.target.value as ContentStatus)}
               className="field-input"
             >
               <option value="DRAFT">Draft</option>

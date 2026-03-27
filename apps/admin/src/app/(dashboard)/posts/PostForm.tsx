@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
-import type { Post, SEOData } from '@applore/types';
+import type { Post, SEOData, ContentStatus } from '@applore/types';
 import RichTextEditor from '@/components/editor/RichTextEditor';
 import SEOPanel from '@/components/seo/SEOPanel';
 
@@ -33,10 +33,10 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
   const [status, setStatus] = useState(post?.status || 'DRAFT');
   const [scheduledAt, setScheduledAt] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    post?.categories?.map((pc: { category: { id: string } }) => pc.category.id) || []
+    post?.categories?.map((cat) => cat.id) || []
   );
   const [selectedTags, setSelectedTags] = useState<string[]>(
-    post?.tags?.map((pt: { tag: { id: string } }) => pt.tag.id) || []
+    post?.tags?.map((tag) => tag.id) || []
   );
   const [seo, setSeo] = useState<Partial<SEOData>>(post?.seo || {});
   const [activeTab, setActiveTab] = useState<'content' | 'seo'>('content');
@@ -59,7 +59,7 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
     );
   }
 
-  async function handleSave(newStatus?: string) {
+  async function handleSave(newStatus?: ContentStatus) {
     const finalStatus = newStatus || status;
     setSaving(true);
     try {
@@ -178,7 +178,7 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
           <h3 className="font-semibold">Publish</h3>
           <div>
             <label className="text-sm font-medium mb-1 block">Status</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)} className="field-input">
+            <select value={status} onChange={(e) => setStatus(e.target.value as ContentStatus)} className="field-input">
               <option value="DRAFT">Draft</option>
               <option value="PUBLISHED">Published</option>
               <option value="SCHEDULED">Scheduled</option>

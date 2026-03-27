@@ -8,10 +8,10 @@ export default async function SettingsPage() {
   const session = await auth();
   const token = (session as { accessToken?: string })?.accessToken;
 
-  let settings = null;
+  let settings: { id: string; siteTitle: string; [key: string]: unknown } | null = null;
   try {
     const res = await apiFetch<{ data: unknown }>('/settings', { token, cache: 'no-store' });
-    settings = res.data;
+    settings = res.data as typeof settings;
   } catch { /* */ }
 
   return (

@@ -79,7 +79,7 @@ export default async function pagesRoutes(app: FastifyInstance) {
       data: {
         title,
         slug,
-        content: content || [],
+        content: (content || []) as object[],
         status: (status as 'DRAFT' | 'PUBLISHED') || 'DRAFT',
         publishedAt: status === 'PUBLISHED' ? new Date() : null,
         seo: seo ? { create: seo } : undefined,
@@ -124,7 +124,7 @@ export default async function pagesRoutes(app: FastifyInstance) {
       data: {
         title,
         slug,
-        content: content as unknown[],
+        content: content as object[] | undefined,
         status: status as 'DRAFT' | 'PUBLISHED' | undefined,
         publishedAt: !wasPublished && nowPublished ? new Date() : undefined,
         seo: seo

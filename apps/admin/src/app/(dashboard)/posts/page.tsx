@@ -74,9 +74,9 @@ export default async function PostsPage() {
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell">
                     <div className="flex gap-1 flex-wrap">
-                      {post.categories?.slice(0, 2).map((pc: { category: { id: string; name: string } }) => (
-                        <span key={pc.category.id} className="text-xs bg-muted px-1.5 py-0.5 rounded">
-                          {pc.category.name}
+                      {post.categories?.slice(0, 2).map((cat) => (
+                        <span key={cat.id} className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                          {cat.name}
                         </span>
                       ))}
                     </div>
