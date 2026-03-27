@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm --filter=@applore/db generate && pnpm --filter=@applore/admin build",
+  "installCommand": "HUSKY=0 pnpm install",
+  "outputDirectory": "apps/admin/.next",
+  "framework": "nextjs"
+}
