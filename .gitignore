@@ -1,6 +1,6 @@
 node_modules
-.env
-.env.local
+.env*
+!.env.example
 .next
 dist
 build
@@ -8,3 +8,14 @@ build
 .turbo
 uploads
 .DS_Store
+
+# Nested node_modules and build artifacts
+**/node_modules
+**/.env*
+!**/.env.example
+**/.next
+**/dist
+**/build
+**/*.log
+**/.turbo
+**/uploads

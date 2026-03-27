@@ -21,7 +21,7 @@ import tagsRoutes from './routes/tags';
 
 const PORT = parseInt(process.env.PORT || '4000');
 const CORS_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:3000,http://localhost:3001').split(',');
-const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, '..', 'uploads');
+const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR || path.join(__dirname, '..', 'uploads'));
 
 // Ensure uploads directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -29,12 +29,7 @@ if (!fs.existsSync(UPLOAD_DIR)) {
 }
 
 const app = Fastify({
-  logger: {
-    level: process.env.NODE_ENV === 'production' ? 'warn' : 'info',
-    transport: process.env.NODE_ENV !== 'production'
-      ? { target: 'pino-pretty', options: { colorize: true } }
-      : undefined,
-  },
+  logger: true,
 });
 
 async function start() {

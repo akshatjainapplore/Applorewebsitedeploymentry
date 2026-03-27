@@ -13,7 +13,7 @@
     "db:migrate:deploy": "pnpm --filter @applore/db db:migrate:deploy",
     "db:seed": "pnpm --filter @applore/db db:seed",
     "db:studio": "pnpm --filter @applore/db db:studio",
-    "prepare": "node -e \"if(process.env.NODE_ENV !== 'production' && !process.env.CI && !process.env.VERCEL) require('husky').install()\""
+    "prepare": "node -e \"if(process.env.NODE_ENV !== 'production' && !process.env.CI && !process.env.VERCEL) try { require('husky') } catch (e) {}\""
   },
   "devDependencies": {
     "husky": "^9.0.11",
