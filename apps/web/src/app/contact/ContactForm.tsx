@@ -49,7 +49,7 @@ export default function ContactForm() {
           Message sent!
         </h2>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', lineHeight: '24px', color: '#4B5563', margin: 0 }}>
-          We'll be in touch shortly at <strong>{email}</strong>.
+          We&apos;ll be in touch shortly at <strong>{email}</strong>.
         </p>
       </div>
     );
